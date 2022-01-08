@@ -1,3 +1,4 @@
+Flutter Version: 2.8.1
 # Flutter Wallet App Ui
  With Dark & Light Theme
 - [Ui Credit](https://www.uplabs.com/posts/ewalle-portable-wallet)
