@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_wallet/ui/screen/QRScanner.dart';
 import 'package:flutter_wallet/util/file_path.dart';
 
 class HomePage extends StatefulWidget {
@@ -42,10 +43,18 @@ class _HomePageState extends State<HomePage> {
                     'Send Money',
                     style: Theme.of(context).textTheme.headline4,
                   ),
-                  SvgPicture.asset(
-                    scan,
-                    color: Theme.of(context).iconTheme.color,
-                    width: 18,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const QRScanner())
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      scan,
+                      color: Theme.of(context).iconTheme.color,
+                      width: 18,
+                    ),
                   ),
                 ],
               ),

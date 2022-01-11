@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_wallet/ui/screen/drawer_page.dart';
+import 'package:flutter_wallet/ui/screen/sign_up.dart';
 import 'package:flutter_wallet/util/file_path.dart';
 import 'package:intl/intl.dart';
 
@@ -139,9 +140,19 @@ class _SignInPageState extends State<SignInPage> {
         const SizedBox(
           height: 16,
         ),
-        Text(
-          'Create an Account',
-          style: Theme.of(context).textTheme.bodyText2,
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SignUpPage(),
+              ),
+            );
+          },
+          child: Text(
+            'Create an Account',
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
         )
       ],
     );

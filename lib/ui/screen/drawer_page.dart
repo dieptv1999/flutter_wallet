@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_wallet/humidity_slider/screen/humidity_screen.dart';
 import 'package:flutter_wallet/ui/screen/home_page.dart';
+import 'package:flutter_wallet/ui/screen/profile_page.dart';
+import 'package:flutter_wallet/ui/screen/settings_screen.dart';
+import 'package:flutter_wallet/ui/screen/sign_in.dart';
 import 'package:flutter_wallet/util/file_path.dart';
+import 'package:flutter_wallet/webview/webview_screen.dart';
 
 class DrawerPage extends StatefulWidget {
   const DrawerPage({Key? key}) : super(key: key);
@@ -13,6 +18,7 @@ class DrawerPage extends StatefulWidget {
 class _DrawerPageState extends State<DrawerPage> with TickerProviderStateMixin {
   bool sideBarActive = false;
   late AnimationController rotationController;
+
   @override
   void initState() {
     rotationController = AnimationController(
@@ -86,33 +92,79 @@ class _DrawerPageState extends State<DrawerPage> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     navigatorTitle("Home", true),
-                    navigatorTitle("Profile", false),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ProfileScreen(),
+                            ),
+                          );
+                        },
+                        child: navigatorTitle("Profile", false)),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const WebViewScreen(),
+                            ),
+                          );
+                        },
+                        child: navigatorTitle("Browser", false)),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HumidityScreen(),
+                            ),
+                          );
+                        },
+                        child: navigatorTitle("Humidity", false)),
                     navigatorTitle("Accounts", false),
                     navigatorTitle("Transactions", false),
                     navigatorTitle("Stats", false),
-                    navigatorTitle("Settings", false),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SettingsScreen(),
+                            ),
+                          );
+                        },
+                        child: navigatorTitle("Settings", false)),
                     navigatorTitle("Help", false),
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.power_settings_new,
-                      size: 24,
-                      color: Theme.of(context).iconTheme.color,
-                      // color: sideBarActive ? Colors.black : Colors.white,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Logout",
-                      style: Theme.of(context).textTheme.headline6,
-                    )
-                  ],
+              InkWell(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SignInPage()),
+                      (Route<dynamic> route) => false);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.power_settings_new,
+                        size: 24,
+                        color: Theme.of(context).iconTheme.color,
+                        // color: sideBarActive ? Colors.black : Colors.white,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Logout",
+                        style: Theme.of(context).textTheme.headline6,
+                      )
+                    ],
+                  ),
                 ),
               ),
               Container(
