@@ -19,8 +19,8 @@ class _SignUpPageState extends State<SignUpPage> {
   String hashImage = '';
 
   void signUp() async {
-    // String address = await web3Service.createWallet(hashImage);
-    // print(address);
+    String address = await web3Service.createWallet(hashImage);
+    print(address);
     print(await web3Service.getBalance());
     print("dssdsdsd");
   }

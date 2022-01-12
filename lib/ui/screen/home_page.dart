@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_wallet/services/web3_service.dart';
 import 'package:flutter_wallet/ui/screen/QRScanner.dart';
 import 'package:flutter_wallet/util/file_path.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,6 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Web3Service web3Service = Web3Service();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,8 +51,8 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const QRScanner())
-                      );
+                          MaterialPageRoute(
+                              builder: (context) => const QRScanner()));
                     },
                     child: SvgPicture.asset(
                       scan,
@@ -141,9 +145,23 @@ class _HomePageState extends State<HomePage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                '20,600',
-                style: Theme.of(context).textTheme.headline5,
+              StreamBuilder<double>(
+                stream: Stream.periodic(const Duration(seconds: 15))
+                    .asyncMap((i) => web3Service.getBalance()),
+                builder:
+                    (BuildContext context, AsyncSnapshot<double> snapshot) {
+                  if (snapshot.hasData) {
+                    print(snapshot.data.toString());
+                    return Text(
+                      snapshot.data.toString(),
+                      style: Theme.of(context).textTheme.headline5,
+                    );
+                  } else {
+                    return const CircularProgressIndicator(
+                      value: 8,
+                    );
+                  }
+                },
               ),
               const SizedBox(
                 height: 12,
@@ -157,16 +175,50 @@ class _HomePageState extends State<HomePage> {
               )
             ],
           ),
-          Container(
-            height: 55,
-            width: 55,
-            decoration: BoxDecoration(
-              color: const Color(0xffFFAC30),
-              borderRadius: BorderRadius.circular(80),
-            ),
-            child: const Center(
-              child: Icon(
-                Icons.add,
+          InkWell(
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: Container(
+                          width: 250,
+                          height: 250,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          child: FutureBuilder<String>(
+                              future: web3Service.getAddress(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<String> snapshot) {
+                                if (snapshot.hasData) {
+                                  return QrImage(
+                                    data: snapshot.data ?? '',
+                                    version: QrVersions.auto,
+                                    size: 180.0,
+                                  );
+                                } else {
+                                  return const CircularProgressIndicator();
+                                }
+                              }),
+                        ),
+                      ),
+                    );
+                  });
+            },
+            child: Container(
+              height: 55,
+              width: 55,
+              decoration: BoxDecoration(
+                color: const Color(0xffFFAC30),
+                borderRadius: BorderRadius.circular(80),
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.add,
+                ),
               ),
             ),
           ),
@@ -365,5 +417,6 @@ class _HomePageState extends State<HomePage> {
 
 class ModelServices {
   String title, img;
+
   ModelServices({required this.title, required this.img});
 }

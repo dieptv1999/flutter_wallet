@@ -5,6 +5,7 @@ import 'package:flutter_wallet/ui/screen/home_page.dart';
 import 'package:flutter_wallet/ui/screen/profile_page.dart';
 import 'package:flutter_wallet/ui/screen/settings_screen.dart';
 import 'package:flutter_wallet/ui/screen/sign_in.dart';
+import 'package:flutter_wallet/ui/screen/transaction_page.dart';
 import 'package:flutter_wallet/util/file_path.dart';
 import 'package:flutter_wallet/webview/webview_screen.dart';
 
@@ -123,7 +124,16 @@ class _DrawerPageState extends State<DrawerPage> with TickerProviderStateMixin {
                         },
                         child: navigatorTitle("Humidity", false)),
                     navigatorTitle("Accounts", false),
-                    navigatorTitle("Transactions", false),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const TransactionPage(),
+                            ),
+                          );
+                        },
+                        child: navigatorTitle("Transactions", false)),
                     navigatorTitle("Stats", false),
                     GestureDetector(
                         onTap: () {

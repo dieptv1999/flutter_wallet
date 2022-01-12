@@ -3,10 +3,15 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_wallet/model/transaction.dart';
+import 'package:flutter_wallet/services/db_service.dart';
+import 'package:flutter_wallet/services/web3_service.dart';
+import 'package:flutter_wallet/util/file_path.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:web3dart/credentials.dart';
 
 class QRScanner extends StatefulWidget {
-  const QRScanner({Key? key}) : super(key: key);
+  const QRScanner({Key? key,}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _QRScannerState();
@@ -16,9 +21,9 @@ class _QRScannerState extends State<QRScanner> {
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Web3Service web3Service = Web3Service();
+  DbService db = DbService();
 
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
   @override
   void reassemble() {
     super.reassemble();
@@ -83,10 +88,26 @@ class _QRScannerState extends State<QRScanner> {
     setState(() {
       this.controller = controller;
     });
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((scanData) async {
       setState(() {
         result = scanData;
       });
+      String? code = scanData.code;
+      try {
+        EthereumAddress address = EthereumAddress.fromHex(code!);
+        controller.pauseCamera();
+        String result = await web3Service.sendTransaction(address.hexEip55, 0.01);
+        db.insertTransaction(TransactionCustom(
+          createdMillis: DateTime.now().millisecondsSinceEpoch,
+          name: result,
+          point: 0.01,
+          status: 1,
+        ));
+        Navigator.pop(context);
+      } catch(e) {
+        print(e);
+        controller.resumeCamera();
+      }
     });
   }
 

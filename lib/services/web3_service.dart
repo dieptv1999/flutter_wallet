@@ -6,7 +6,7 @@ import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart';
 
-const apiUrl = "https://bsc-dataseed.binance.org";
+const apiUrl = "https://data-seed-prebsc-1-s1.binance.org:8545";
 var httpClient = Client();
 var ethClient = Web3Client(apiUrl, httpClient);
 
@@ -23,8 +23,7 @@ class Web3Service {
     EthPrivateKey privKey = EthPrivateKey.fromHex(privateKey);
     Uint8List pubKey = privateKeyToPublic(privKey.privateKeyInt);
 
-    Uint8List address =
-        publicKeyToAddress(pubKey);
+    Uint8List address = publicKeyToAddress(pubKey);
     String addressHex =
         bytesToHex(address, include0x: true, forcePadLength: 40);
     var random = Random.secure();
@@ -69,7 +68,46 @@ class Web3Service {
     var credentials = EthPrivateKey.fromHex(wallet.privateKey.address.hex);
 
     EtherAmount balance = await ethClient.getBalance(credentials.address);
-    print(balance.getValueInUnit(EtherUnit.ether));
-    return 0;
+    return balance.getValueInUnit(EtherUnit.ether).toDouble();
+  }
+
+  Future<Wallet?> getWallet() async {
+    try {
+      String content = await readWallet();
+      Wallet wallet = Wallet.fromJson(content, "password");
+      return wallet;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<String> getAddress() async {
+    try {
+      Wallet? wallet = await getWallet();
+      var credentials =
+          EthPrivateKey.fromHex(wallet?.privateKey.address.hex ?? "");
+      return credentials.address.hex;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  Future<String> sendTransaction(String toAddress, double value) async {
+    Wallet? wallet = await getWallet();
+    Credentials credentials =
+        EthPrivateKey.fromHex(wallet?.privateKey.address.hex ?? "");
+
+    String result = await ethClient.sendTransaction(
+      credentials,
+      Transaction(
+        to: EthereumAddress.fromHex(toAddress),
+        gasPrice: EtherAmount.inWei(BigInt.from(10000000000)),
+        maxGas: 250000,
+        value: EtherAmount.fromUnitAndValue(
+            EtherUnit.wei, BigInt.from(value * 1e18)),
+      ),
+      chainId: 97,
+    );
+    return result;
   }
 }

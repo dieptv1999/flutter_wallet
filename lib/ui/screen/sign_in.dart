@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_wallet/services/web3_service.dart';
 import 'package:flutter_wallet/ui/screen/drawer_page.dart';
 import 'package:flutter_wallet/ui/screen/sign_up.dart';
 import 'package:flutter_wallet/util/file_path.dart';
@@ -16,6 +17,20 @@ class _SignInPageState extends State<SignInPage> {
   static DateTime now = DateTime.now();
   String formattedTime = DateFormat.jm().format(now);
   String formattedDate = DateFormat('MMM d, yyyy | EEEEEE').format(now);
+  Web3Service web3Service = Web3Service();
+
+  void signIn() async {
+    var wallet = await web3Service.getWallet();
+    if (wallet != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const DrawerPage(),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -125,12 +140,7 @@ class _SignInPageState extends State<SignInPage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const DrawerPage(),
-              ),
-            );
+            signIn();
           },
           child: Text(
             'Sign in',
