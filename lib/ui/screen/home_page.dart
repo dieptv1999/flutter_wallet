@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_wallet/services/web3_service.dart';
 import 'package:flutter_wallet/ui/screen/QRScanner.dart';
+import 'package:flutter_wallet/ui/screen/WalletConnectQr.dart';
 import 'package:flutter_wallet/util/file_path.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -106,26 +107,46 @@ class _HomePageState extends State<HomePage> {
               width: 12,
             ),
             Text(
-              'eWalle',
-              style: Theme.of(context).textTheme.headline3,
+              'eWallet',
+              style: Theme.of(context).textTheme.headline4,
             )
           ],
         ),
-        InkWell(
-          onTap: () {
-            setState(() {
-              // print('call');
-              // xOffset = 240;
-              // yOffset = 180;
-              // scaleFactor = 0.7;
-              // isDrawerOpen = true;
-            });
-          },
-          child: SvgPicture.asset(
-            menu,
-            width: 16,
-            color: Theme.of(context).iconTheme.color,
-          ),
+        Row(
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const WalletConnectQr()));
+              },
+              child: SvgPicture.asset(
+                scan,
+                width: 20,
+                color: Theme.of(context).iconTheme.color,
+              ),
+            ),
+            const SizedBox(
+              width: 16,
+            ),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  // print('call');
+                  // xOffset = 240;
+                  // yOffset = 180;
+                  // scaleFactor = 0.7;
+                  // isDrawerOpen = true;
+                });
+              },
+              child: SvgPicture.asset(
+                menu,
+                width: 20,
+                color: Theme.of(context).iconTheme.color,
+              ),
+            ),
+          ],
         ),
       ],
     );

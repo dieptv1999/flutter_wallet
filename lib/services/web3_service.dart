@@ -92,6 +92,15 @@ class Web3Service {
     }
   }
 
+  Future<String> getPrivateKey() async {
+    try {
+      Wallet? wallet = await getWallet();
+      return wallet?.privateKey.address.hex ?? "";
+    } catch (e) {
+      return '';
+    }
+  }
+
   Future<String> sendTransaction(String toAddress, double value) async {
     Wallet? wallet = await getWallet();
     Credentials credentials =

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_wallet/humidity_slider/screen/humidity_screen.dart';
 import 'package:flutter_wallet/ui/screen/home_page.dart';
+import 'package:flutter_wallet/ui/screen/notification_page.dart';
 import 'package:flutter_wallet/ui/screen/profile_page.dart';
 import 'package:flutter_wallet/ui/screen/settings_screen.dart';
 import 'package:flutter_wallet/ui/screen/sign_in.dart';
@@ -102,7 +103,7 @@ class _DrawerPageState extends State<DrawerPage> with TickerProviderStateMixin {
                             ),
                           );
                         },
-                        child: navigatorTitle("Profile", false)),
+                        child: navigatorTitle("NFTs", false)),
                     GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -123,7 +124,6 @@ class _DrawerPageState extends State<DrawerPage> with TickerProviderStateMixin {
                           );
                         },
                         child: navigatorTitle("Humidity", false)),
-                    navigatorTitle("Accounts", false),
                     GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -134,7 +134,16 @@ class _DrawerPageState extends State<DrawerPage> with TickerProviderStateMixin {
                           );
                         },
                         child: navigatorTitle("Transactions", false)),
-                    navigatorTitle("Stats", false),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const NotificationPage(),
+                            ),
+                          );
+                        },
+                        child: navigatorTitle("Notifications", false)),
                     GestureDetector(
                         onTap: () {
                           Navigator.push(

@@ -1,22 +1,18 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_wallet/services/navigation_service.dart';
 import 'package:flutter_wallet/ui/screen/notification_page.dart';
 import 'package:flutter_wallet/ui/screen/sign_in.dart';
-import 'package:flutter_wallet/ui/screen/sign_up.dart';
-import 'package:flutter_wallet/util/constant.dart';
 import 'package:flutter_wallet/util/theme.dart';
+import 'package:wallet_connect/wallet_connect.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print(
-      "Handling a background message: ${message.messageId} ${message.notification?.body} ${Platform.isIOS ? message.notification?.apple?.imageUrl : message.notification?.android?.imageUrl}");
   Random random = Random.secure();
   AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -73,8 +69,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final GlobalKey<NavigatorState> navigatorKey =
-      GlobalKey(debugLabel: "Main Navigator");
 
   @override
   void initState() {
@@ -82,7 +76,7 @@ class _MyAppState extends State<MyApp> {
     AwesomeNotifications()
         .actionStream
         .listen((ReceivedNotification receivedNotification) {
-      navigatorKey.currentState?.pushNamed("notification", arguments: {
+      NavigationService.navigatorKey.currentState?.pushNamed("notification", arguments: {
         // id: receivedNotification.id
       });
     });
@@ -104,7 +98,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: navigatorKey,
+      navigatorKey: NavigationService.navigatorKey,
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       debugShowCheckedModeBanner: false,
