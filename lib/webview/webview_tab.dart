@@ -141,6 +141,11 @@ class WebViewTabState extends State<WebViewTab> with WidgetsBindingObserver {
         initialOptions: initialOptions,
         windowId: widget.webViewModel.windowId,
         onWebViewCreated: (controller) async {
+          controller.addJavaScriptHandler(handlerName: 'isConnected', callback: (args) {
+
+            return true;
+          });
+
           initialOptions.crossPlatform.transparentBackground = false;
           await controller.setOptions(options: initialOptions);
           
@@ -171,6 +176,7 @@ class WebViewTabState extends State<WebViewTab> with WidgetsBindingObserver {
           }
         },
         onLoadStop: (controller, url) async {
+          await controller.injectJavascriptFileFromAsset(assetFilePath: "assets/js/web3.js");
           widget.webViewModel.url = url;
           widget.webViewModel.favicon = null;
           widget.webViewModel.loaded = true;

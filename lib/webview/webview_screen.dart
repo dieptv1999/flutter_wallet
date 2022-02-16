@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_wallet/webview/models/browser_model.dart';
+import 'package:flutter_wallet/webview/models/web3_model.dart';
 import 'package:flutter_wallet/webview/models/webview_model.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
@@ -69,6 +70,9 @@ class WebViewScreenState extends State<WebViewScreen> {
       providers: [
         ChangeNotifierProvider(
           create: (context) => WebViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Web3Model(),
         ),
         ChangeNotifierProxyProvider<WebViewModel, BrowserModel>(
           update: (context, webViewModel, browserModel) {

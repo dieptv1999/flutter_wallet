@@ -20,15 +20,15 @@ class _SignInPageState extends State<SignInPage> {
   Web3Service web3Service = Web3Service();
 
   void signIn() async {
-    var wallet = await web3Service.getWallet();
-    if (wallet != null) {
+    // var wallet = await web3Service.getWallet();
+    // if (wallet != null) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => const DrawerPage(),
         ),
       );
-    }
+    // }
   }
 
   @override
@@ -52,6 +52,7 @@ class _SignInPageState extends State<SignInPage> {
                 padding: const EdgeInsets.all(18),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     _topContent(),
                     _centerContent(),
@@ -131,6 +132,7 @@ class _SignInPageState extends State<SignInPage> {
 
   Widget _bottomContent() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         MaterialButton(
           elevation: 0,
