@@ -28,25 +28,25 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               _contentHeader(),
               const SizedBox(
-                height: 30,
+                height: 10,
               ),
-              Text(
-                'Account Overview',
-                style: Theme.of(context).textTheme.headline4,
-              ),
+              // Text(
+              //   'Account Overview',
+              //   style: Theme.of(context).textTheme.headline4,
+              // ),
               const SizedBox(
                 height: 16,
               ),
               _contentOverView(),
               const SizedBox(
-                height: 30,
+                height: 15,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
                     'Send Money',
-                    style: Theme.of(context).textTheme.headline4,
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                   InkWell(
                     onTap: () {
@@ -66,14 +66,14 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 16),
               _contentSendMoney(),
               const SizedBox(
-                height: 30,
+                height: 15,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
                     'Services',
-                    style: Theme.of(context).textTheme.headline4,
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                   SvgPicture.asset(
                     filter,
@@ -81,9 +81,6 @@ class _HomePageState extends State<HomePage> {
                     width: 18,
                   ),
                 ],
-              ),
-              const SizedBox(
-                height: 16,
               ),
               _contentServices(context),
             ],
@@ -107,8 +104,8 @@ class _HomePageState extends State<HomePage> {
               width: 12,
             ),
             Text(
-              'eWallet',
-              style: Theme.of(context).textTheme.headline4,
+              'Account 1',
+              style: Theme.of(context).textTheme.headline5,
             )
           ],
         ),
@@ -201,32 +198,82 @@ class _HomePageState extends State<HomePage> {
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Container(
-                          width: 250,
-                          height: 250,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                          ),
-                          child: FutureBuilder<String>(
-                              future: web3Service.getAddress(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<String> snapshot) {
-                                if (snapshot.hasData) {
-                                  return QrImage(
-                                    data: snapshot.data ?? '',
-                                    version: QrVersions.auto,
-                                    size: 180.0,
-                                  );
-                                } else {
-                                  return const CircularProgressIndicator();
-                                }
-                              }),
-                        ),
-                      ),
-                    );
+                    return FutureBuilder<String>(
+                        future: web3Service.getAddress(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<String> snapshot) {
+                          if (snapshot.hasData) {
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    width: 250,
+                                    child: Text(
+                                      "Quét địa chỉ để nhận thanh toán",
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: Container(
+                                      width: 250,
+                                      height: 250,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                      ),
+                                      child: QrImage(
+                                        data: snapshot.data ?? '',
+                                        version: QrVersions.auto,
+                                        size: 180.0,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  SizedBox(
+                                    width: 250,
+                                    height: 40,
+                                    child: ElevatedButton.icon(
+                                      onPressed: () {},
+                                      style: ButtonStyle(
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        )),
+                                        elevation: MaterialStateProperty.all(1),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.blue),
+                                      ),
+                                      icon: const Icon(Icons.content_copy),
+                                      label: Text(
+                                        snapshot.data ?? '',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        });
                   });
             },
             child: Container(
@@ -390,11 +437,11 @@ class _HomePageState extends State<HomePage> {
 
     return SizedBox(
       width: double.infinity,
-      height: 400,
+      height: 300,
       child: GridView.count(
         crossAxisCount: 4,
         childAspectRatio: MediaQuery.of(context).size.width /
-            (MediaQuery.of(context).size.height / 1.1),
+            (MediaQuery.of(context).size.height / 1.4),
         children: listServices.map((value) {
           return GestureDetector(
             onTap: () {
